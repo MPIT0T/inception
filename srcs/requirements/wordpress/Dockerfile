@@ -8,14 +8,6 @@ RUN apt update && \
 
 RUN mkdir -p /var/www/html /run/php
 
-# # Download and setup wordpress
-# RUN curl -O https://wordpress.org/latest.tar.gz && \
-#     tar -xzf latest.tar.gz && \
-#     mv wordpress/* /var/www/html/ && \
-#     rm -rf wordpress latest.tar.gz && \
-#     chown -R www-data:www-data /var/www/html
-
-# After downloading WordPress
 RUN curl -O https://wordpress.org/latest.tar.gz && \
     tar -xzf latest.tar.gz && \
     mv wordpress /tmp/wordpress && \
