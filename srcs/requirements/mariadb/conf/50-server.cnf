@@ -2,7 +2,7 @@
 bind-address = 0.0.0.0
 
 [mysqld]
-user = mysql
+user = mdbuser
 port = 3306
 bind-address = 0.0.0.0
 skip-host-cache

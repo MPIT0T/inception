@@ -1,4 +1,4 @@
-FROM debian:12
+FROM debian:11
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -6,15 +6,28 @@ RUN apt update && \
     apt install -y php php-fpm php-mysql php-curl php-gd php-mbstring php-xml php-xmlrpc mariadb-client wget unzip curl && \
     apt clean
 
-# Download and setup wordpress
+RUN mkdir -p /var/www/html /run/php
+
+# # Download and setup wordpress
+# RUN curl -O https://wordpress.org/latest.tar.gz && \
+#     tar -xzf latest.tar.gz && \
+#     mv wordpress/* /var/www/html/ && \
+#     rm -rf wordpress latest.tar.gz && \
+#     chown -R www-data:www-data /var/www/html
+
+# After downloading WordPress
 RUN curl -O https://wordpress.org/latest.tar.gz && \
     tar -xzf latest.tar.gz && \
-    rm latest.tar.gz && \
-    mv wordpress /var/www/html && \
-    chown -R www-data:www-data /var/www/html
+    mv wordpress /tmp/wordpress && \
+    rm latest.tar.gz
+
+# Set PHP-FPM to listen on TCP instead of Unix socket
+RUN sed -i 's|listen = /run/php/php7.4-fpm.sock|listen = 0.0.0.0:9000|' /etc/php/7.4/fpm/pool.d/www.conf
+
 
 COPY tools/init.sh /tools/init.sh
 RUN chmod +x /tools/init.sh
 
 EXPOSE 9000
+
 ENTRYPOINT ["/tools/init.sh"]
