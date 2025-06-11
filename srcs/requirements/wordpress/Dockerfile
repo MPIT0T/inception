@@ -6,6 +6,9 @@ RUN apt update && \
     apt install -y php php-fpm php-mysql php-curl php-gd php-mbstring php-xml php-xmlrpc mariadb-client wget unzip curl && \
     apt clean
 
+RUN curl -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
+    chmod +x /usr/local/bin/wp
+
 RUN mkdir -p /var/www/html /run/php
 
 RUN curl -O https://wordpress.org/latest.tar.gz && \

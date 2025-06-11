@@ -11,5 +11,5 @@ SET PASSWORD FOR 'root'@'localhost' = PASSWORD('${MYSQL_ROOT_PASSWORD}');
 FLUSH PRIVILEGES;
 EOF
 
-echo "[+] Running dynamic init script for MariaDB"
+echo "[INFO] Running dynamic init script for MariaDB"
 mysqld_safe --init-file=/tmp/init.sql
