@@ -1,5 +1,6 @@
 services:
   nginx:
+    image: nginx
     container_name: nginx
     build:
       context: requirements/nginx/
@@ -16,9 +17,10 @@ services:
       - ssl_key
     ports:
       - "443:443"
-    restart: unless-stopped
+    restart: always
 
   mariadb:
+    image: mariadb
     container_name: mariadb
     build:
       context:  requirements/mariadb/
@@ -36,6 +38,7 @@ services:
     restart: always
 
   wordpress:
+    image: wordpress
     container_name: wordpress
     build:
       context: requirements/wordpress/
@@ -56,10 +59,13 @@ services:
 
 networks:
   inception:
+    name: inception
 
 volumes:
   mariadb:
+    name: mariadb
   wordpress:
+    name: wordpress
 
 secrets:
   ssl_crt:
