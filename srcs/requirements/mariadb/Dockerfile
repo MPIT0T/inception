@@ -1,13 +1,19 @@
 FROM debian:11
 
 RUN apt update && \
-    apt install -y mariadb-server && \
-    apt clean
+    apt upgrade -y && \
+    apt install -y mariadb-server --no-install-recommends && \
+    apt clean && \
+    rm -rf /var/lib/apt/lists/*
 
-COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/
-COPY tools/init.sh /init.sh
+RUN mkdir -p /run/mysqld/
+RUN chown -R mysql:mysql /run/mysqld/
 
-RUN chmod +x /init.sh
+COPY tools/init.sh /usr/local/bin/init.sh
+RUN chmod +x /usr/local/bin/init.sh
 
-EXPOSE 3306
-CMD ["/init.sh"]
+COPY conf/mariadb.cnf /etc/mysql/mariadb.conf.d/mariadb.cnf
+
+ENTRYPOINT ["/usr/local/bin/init.sh"]
+
+CMD ["mariadbd"]

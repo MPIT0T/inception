@@ -1,48 +1,76 @@
 services:
   nginx:
-    build: ./requirements/nginx
     container_name: nginx
-    volumes:
-      - wordpress_files:/var/www/html
-    ports:
-      - "443:443"
+    build:
+      context: requirements/nginx/
     networks:
       - inception
-    env_file:
-      - .env
+    volumes:
+      - wordpress:/var/www/html
     depends_on:
       - wordpress
+    env_file:
+      - .env
+    secrets:
+      - ssl_crt
+      - ssl_key
+    ports:
+      - "443:443"
+    restart: unless-stopped
+
+  mariadb:
+    container_name: mariadb
+    build:
+      context:  requirements/mariadb/
+    networks:
+      - inception
+    volumes:
+      - mariadb:/var/lib/mysql
+    env_file:
+      - .env
+    secrets:
+      - wp_password
+      - wp_admin_password
+      - db_password
+      - db_root_password
     restart: always
 
   wordpress:
-    build: ./requirements/wordpress
     container_name: wordpress
-    volumes:
-      - wordpress_db:/var/lib/mysql
-      - wordpress_files:/var/www/html
+    build:
+      context: requirements/wordpress/
     networks:
       - inception
-    env_file:
-      - .env
+    volumes:
+      - wordpress:/var/www/html
     depends_on:
       - mariadb
-    restart: always
-
-  mariadb:
-    build: ./requirements/mariadb
-    container_name: mariadb
-    volumes:
-      - wordpress_db:/var/lib/mysql
-    networks:
-      - inception
     env_file:
       - .env
+    secrets:
+      - wp_password
+      - wp_admin_password
+      - db_password
+      - db_root_password
     restart: always
-
-volumes:
-  wordpress_db:
-  wordpress_files:
 
 networks:
   inception:
-    driver: bridge
+
+volumes:
+  mariadb:
+  wordpress:
+
+secrets:
+  ssl_crt:
+    file: ../secrets/ssl_certificate
+  ssl_key:
+    file: ../secrets/ssl_certificate_key
+  db_password:
+    file: ../secrets/db_password
+  db_root_password:
+    file: ../secrets/db_root_password
+  wp_password:
+    file: ../secrets/wp_password
+  wp_admin_password:
+    file: ../secrets/wp_admin_password

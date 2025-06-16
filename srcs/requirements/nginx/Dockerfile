@@ -1,15 +1,11 @@
 FROM debian:11
 
 RUN apt update && \
-    apt install -y nginx openssl curl bash && \
-    apt clean
+    apt upgrade -y && \
+    apt install -y nginx openssl && \
+    apt clean && \
+    rm -rf  /var/lib/apt/lists/*
 
-COPY conf /etc/nginx/conf.d/
-COPY tools /tools
+COPY conf/nginx.conf /etc/nginx/nginx.conf
 
-RUN chmod +x /tools/init.sh
-RUN chmod +x /tools/generate_cert.sh
-
-EXPOSE 443
-
-ENTRYPOINT ["/tools/init.sh"]
+CMD ["nginx", "-g", "daemon off;"]
