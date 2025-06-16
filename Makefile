@@ -1,5 +1,7 @@
 include srcs/.env
 
+VOL_NAMES := mariadb wordpress
+
 all: up
 
 up: secrets
@@ -31,7 +33,7 @@ clean:
 	docker-compose -f srcs/docker-compose.yml down --volumes --rmi all
 
 fclean: clean
-	docker run -it --rm -v $(HOME)/data:/data busybox sh -c "rm -rf /data/*"
+	sudo rm -rf ~/data
 	rm -rf ./secrets/
 
 re: fclean up
@@ -50,7 +52,7 @@ help:
 	@echo "  up      - Start services"
 	@echo "  build   - Build services"
 	@echo "  down    - Remove services"
-	@echo "  start   - Start services"
+	@echo "  start   - Start services" 
 	@echo "  stop    - Stop services"
 	@echo "  logs    - View logs"
 	@echo "  prune   - Remove all unused containers and images"
