@@ -1,7 +1,5 @@
 include srcs/.env
 
-VOL_NAMES := mariadb wordpress
-
 all: up
 
 up: secrets
@@ -52,7 +50,7 @@ help:
 	@echo "  up      - Start services"
 	@echo "  build   - Build services"
 	@echo "  down    - Remove services"
-	@echo "  start   - Start services" 
+	@echo "  start   - Start services"
 	@echo "  stop    - Stop services"
 	@echo "  logs    - View logs"
 	@echo "  prune   - Remove all unused containers and images"

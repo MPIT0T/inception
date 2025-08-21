@@ -67,16 +67,16 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: ${HOME}/data/mariadb
-      o: bind  
+      device: "${HOME}/data/mariadb"
+      o: bind
   wordpress:
     name: wordpress
     driver: local
     driver_opts:
       type: none
-      device: ${HOME}/data/wordpress
+      device: "${HOME}/data/wordpress"
       o: bind
-    
+
 secrets:
   ssl_crt:
     file: ../secrets/ssl_certificate
